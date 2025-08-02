@@ -1,0 +1,32 @@
+/* If not using Tailwind CLI or PostCSS, import the compiled Tailwind CSS instead */
+@import 'tailwindcss/base.css';
+@import 'tailwindcss/components.css';
+@import 'tailwindcss/utilities.css';
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #f2f3f5; /* Tailwind's bg-gray-100 */
+}
+input {
+  margin: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* Tailwind's border */
+}
+button {
+  padding-left: 1rem;   /* Tailwind's px-4 */
+  padding-right: 1rem;
+  padding-top: 0.5rem;  /* Tailwind's py-2 */
+  padding-bottom: 0.5rem;
+  margin-top: 0.5rem;   /* Tailwind's mt-2 */
+  cursor: pointer;
+  background-color: #3b82f6; /* Tailwind's bg-blue-500 */
+  color: #fff;               /* Tailwind's text-white */
+  border-radius: 0.25rem;    /* Tailwind's rounded */
+  transition: background-color 0.2s;
+}
+button:hover {
+  background-color: #2563eb; /* Tailwind's bg-blue-600 */
+}
+
+

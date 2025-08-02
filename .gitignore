@@ -1,0 +1,27 @@
+# Root .gitignore
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+*.env
+
+# VSCode
+.vscode/
+
+# Node
+node_modules/
+dist/
+build/
+*.log
+
+# React (Vite/Cra)
+frontend/.env
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+
+# OS
+.DS_Store
+Thumbs.db
