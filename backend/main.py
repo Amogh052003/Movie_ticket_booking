@@ -9,7 +9,8 @@ app = FastAPI()
 # CORS setup
 origins = [
     "http://localhost:5173",  # Vite dev server
-    "http://localhost:8000",       # Docker/Browser access
+    "http://localhost:8000",
+    "https://ticketbookingwebapp-bzdef6f9ccacghed.centralindia-01.azurewebsites.net"
 ]
 
 app.add_middleware(
