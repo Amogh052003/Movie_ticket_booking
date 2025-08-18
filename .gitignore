@@ -1,26 +1,86 @@
-# Root .gitignore
-
-# Python
-__pycache__/
-*.py[cod]
-*.egg-info/
-.env
-*.env
-
-# VSCode
-.vscode/
-
-# Node
-node_modules/
-dist/
-build/
-*.log
-
-# React (Vite/Cra)
-frontend/.env
-frontend/node_modules/
-frontend/build/
-
-# OS
+############################################
+# Global OS files
+############################################
 .DS_Store
 Thumbs.db
+
+############################################
+# Editors / IDE
+############################################
+.vscode/
+.idea/
+*.code-workspace
+
+############################################
+# Python
+############################################
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.python-version
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.coverage
+coverage.xml
+htmlcov/
+pip-wheel-metadata/
+.eggs/
+*.egg-info/
+
+############################################
+# Node / JavaScript
+############################################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+############################################
+# Vite / React build artifacts
+############################################
+dist/
+.vite/
+.cache/
+.cache-loader/
+
+# Frontend specific (explicit paths)
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+frontend/.cache/
+
+############################################
+# Logs
+############################################
+*.log
+logs/
+lerna-debug.log*
+
+############################################
+# Environment files
+############################################
+.env
+.env.*
+!.env.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+
+############################################
+# Coverage reports
+############################################
+coverage/
+coverage-report/
+
+############################################
+# Docker (local overrides)
+############################################
+docker-compose.override.yml
+
+

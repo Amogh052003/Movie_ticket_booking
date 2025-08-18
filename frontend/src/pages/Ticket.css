@@ -1,0 +1,29 @@
+.ticket-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 90vh;
+    background: #121212;
+    color: white;
+    flex-direction: column;
+  }
+  
+  .ticket-title {
+    font-size: 2rem;
+    margin-bottom: 20px;
+  }
+  
+  .ticket-card {
+    background: #1f1f1f;
+    padding: 25px;
+    border-radius: 16px;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+  }
+  
+  .qr-section {
+    margin-top: 20px;
+  }
+  

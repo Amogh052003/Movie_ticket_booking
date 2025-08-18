@@ -1,82 +1,149 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';  // ✅ added useNavigate
 import axios from 'axios';
 
-const BookTicket = () => {
+const API_BASE_URL = "https://ticket-booking-app-service.azurewebsites.net"; // backend base URL
+
+const BookTickets = () => {
   const { id } = useParams();
+  const navigate = useNavigate();  // ✅ initialize navigate
+
   const [movie, setMovie] = useState(null);
+  const [selectedSeats, setSelectedSeats] = useState([]);
   const [userName, setUserName] = useState('');
-  const [seats, setSeats] = useState(1);
-  const [message, setMessage] = useState('');
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const totalSeats = 20;
 
   useEffect(() => {
-    axios.get(`http://localhost:8000/movies/${id}`)
-      .then(response => {
-        setMovie(response.data);
-      })
-      .catch(error => {
-        console.error('Error fetching movie:', error);
-      });
+    axios.get(`${API_BASE_URL}/movies/${id}`)
+      .then(res => setMovie(res.data))
+      .catch(err => console.error("Error fetching movie:", err));
+
+    axios.get(`${API_BASE_URL}/bookings/${id}`)
+      .then(res => setBookedSeats(res.data)) 
+      .catch(() => setBookedSeats([]));
   }, [id]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const booking = {
-        movie_id: parseInt(id),
-        user_name: userName,
-        seats: parseInt(seats)
-      };
+  const handleSeatToggle = (seat) => {
+    if (bookedSeats.includes(seat)) return; 
+    setSelectedSeats(prev =>
+      prev.includes(seat)
+        ? prev.filter(s => s !== seat)
+        : [...prev, seat]
+    );
+  };
 
-      const response = await axios.post('http://localhost:8000/bookings', booking);
-      setMessage(response.data.message);
-      setUserName('');
-      setSeats(1);
+  const handleBooking = async () => {
+    if (!userName.trim() || selectedSeats.length === 0) {
+      alert("Enter your name and select at least one seat.");
+      return;
+    }
+
+    const data = {
+      movie_id: parseInt(id, 10),
+      user_name: userName.trim(),
+      seats: selectedSeats
+    };
+
+    try {
+      const res = await axios.post(`${API_BASE_URL}/bookings/`, data);
+      
+      // ✅ redirect to ticket page with bookingId (from backend response)
+      const bookingId = res.data?.id || Date.now(); // fallback: timestamp if backend doesn’t return id
+      navigate(`/ticket/${bookingId}`);
+      
     } catch (err) {
-      console.error('Booking failed:', err);
-      setMessage('Booking failed');
+      console.error(err);
+      alert('Booking failed');
     }
   };
 
-  if (!movie) return <p>Loading movie details...</p>;
+  const renderSeats = () => {
+    return Array.from({ length: totalSeats }, (_, i) => {
+      const seat = `S${i + 1}`;
+      const isBooked = bookedSeats.includes(seat);
+      const isSelected = selectedSeats.includes(seat);
+
+      return (
+        <label
+          key={seat}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            marginBottom: '8px'
+          }}
+        >
+          <input
+            type="checkbox"
+            value={seat}
+            checked={isSelected}
+            disabled={isBooked}
+            onChange={() => handleSeatToggle(seat)}
+          />
+          <span style={{ color: isBooked ? '#f87171' : 'white' }}>{seat}</span>
+        </label>
+      );
+    });
+  };
 
   return (
-    <div style={{ padding: '2rem' }}>
-      <h2>Book Tickets for: {movie.title}</h2>
-      <p><strong>Genre:</strong> {movie.genre}</p>
-      <p><strong>Language:</strong> {movie.language}</p>
+    <div style={{
+      background: 'linear-gradient(to bottom right, #1a1a1a, #000)',
+      color: 'white',
+      padding: '24px',
+      minHeight: '100vh'
+    }}>
+      <h2 style={{
+        fontSize: '1.875rem',
+        fontWeight: 'bold',
+        marginBottom: '16px'
+      }}>
+        Book Tickets for {movie?.title}
+      </h2>
 
-      <form onSubmit={handleSubmit} style={{ marginTop: '1rem' }}>
-        <div>
-          <label>Your Name:</label><br />
-          <input
-            type="text"
-            value={userName}
-            required
-            onChange={(e) => setUserName(e.target.value)}
-            style={{ padding: '0.5rem', width: '300px' }}
-          />
-        </div>
-        <div style={{ marginTop: '1rem' }}>
-          <label>Number of Seats:</label><br />
-          <input
-            type="number"
-            value={seats}
-            required
-            min="1"
-            max="10"
-            onChange={(e) => setSeats(e.target.value)}
-            style={{ padding: '0.5rem', width: '100px' }}
-          />
-        </div>
-        <button type="submit" style={{ marginTop: '1.5rem', padding: '0.7rem 1.5rem' }}>
-          Confirm Booking
-        </button>
-      </form>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, 1fr)',
+        gap: '16px',
+        marginBottom: '24px'
+      }}>
+        {renderSeats()}
+      </div>
 
-      {message && <p style={{ marginTop: '1rem', color: 'green' }}>{message}</p>}
+      <div style={{ marginBottom: '16px' }}>
+        <label style={{ display: 'block', marginBottom: '4px' }}>Your Name:</label>
+        <input
+          style={{
+            color: 'black',
+            padding: '8px 12px',
+            borderRadius: '4px',
+            width: '100%',
+            maxWidth: '300px'
+          }}
+          value={userName}
+          onChange={(e) => setUserName(e.target.value)}
+          placeholder="Enter your name"
+        />
+      </div>
+
+      <button
+        onClick={handleBooking}
+        style={{
+          backgroundColor: '#3b82f6',
+          color: 'white',
+          padding: '10px 20px',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer'
+        }}
+        onMouseOver={(e) => e.target.style.backgroundColor = '#2563eb'}
+        onMouseOut={(e) => e.target.style.backgroundColor = '#3b82f6'}
+      >
+        Confirm Booking
+      </button>
     </div>
   );
 };
 
-export default BookTicket;
+export default BookTickets;

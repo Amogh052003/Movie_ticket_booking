@@ -1,95 +1,73 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "https://ticket-booking-app-service-d5djc9ccaxd3ana0.centralindia-01.azurewebsites.net";
+const API_BASE_URL = "https://ticket-booking-app-service.azurewebsites.net"
 const MovieDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const [movie, setMovie] = useState(null);
 
-  // Dummy movie details (replace with actual API logic if needed)
-  const movie = {
-    id,
-    title: "Inception",
-    description:
-      "A skilled thief is given a chance at redemption if he can successfully perform inception — planting an idea in someone's subconscious.",
-    poster:
-      "https://image.tmdb.org/t/p/original/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
-    director: "Christopher Nolan",
-    cast: ["Leonardo DiCaprio", "Joseph Gordon-Levitt", "Elliot Page"],
-    genre: "Sci-Fi, Thriller",
-    releaseDate: "2010-07-16",
-    rating: "8.8",
-  };
+  useEffect(() => {
+    axios.get(`${API_BASE_URL}/movies/${id}`)
+      .then(res => setMovie(res.data))
+      .catch(() => alert('Movie not found.'));
+  }, [id]);
+
+  if (!movie) {
+    return (
+      <p style={{ color: 'white', padding: '24px' }}>Loading...</p>
+    );
+  }
 
   return (
     <div
       style={{
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)",
-        color: "#fff",
-        padding: "2rem",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        fontFamily: "Arial, sans-serif",
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: '40px',
+        padding: '40px',
+        minHeight: '100vh',
+        backgroundColor: 'linear-gradient(to bottom right, #1a1a1a, #000)',
+        color: 'white',
+        fontFamily: 'sans-serif'
       }}
     >
-      <div
+      <img
+        src={movie.poster_url}
+        alt={movie.title}
         style={{
-          display: "flex",
-          maxWidth: "1000px",
-          background: "rgba(255, 255, 255, 0.05)",
-          borderRadius: "20px",
-          overflow: "hidden",
-          boxShadow: "0 0 20px rgba(255, 255, 255, 0.1)",
-          backdropFilter: "blur(10px)",
+          width: '300px',
+          height: 'auto',
+          borderRadius: '8px',
+          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.5)'
         }}
-      >
-        <img
-          src={movie.poster}
-          alt={movie.title}
+      />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+        <h1 style={{ fontSize: '2.25rem', fontWeight: 'bold' }}>{movie.title}</h1>
+        <p>{movie.description}</p>
+        <p><strong>Language:</strong> {movie.language || "N/A"}</p>
+        <p><strong>Duration:</strong> {movie.duration || "N/A"}</p>
+        <p><strong>Rating:</strong> ⭐ {movie.rating || "N/A"}</p>
+        <button
+          onClick={() => navigate(`/book/${movie.id}`)}
           style={{
-            width: "300px",
-            objectFit: "cover",
-            borderRight: "1px solid rgba(255, 255, 255, 0.1)",
+            marginTop: '24px',
+            backgroundColor: '#dc2626',
+            color: 'white',
+            padding: '8px 24px',
+            borderRadius: '6px',
+            border: 'none',
+            cursor: 'pointer',
+            width: 'fit-content'
           }}
-        />
-        <div style={{ padding: "2rem", flex: 1 }}>
-          <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>
-            {movie.title}
-          </h1>
-          <p style={{ fontStyle: "italic", marginBottom: "1rem" }}>
-            Directed by <strong>{movie.director}</strong>
-          </p>
-          <p style={{ marginBottom: "1rem" }}>{movie.description}</p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong>Genre:</strong> {movie.genre}
-          </p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong>Cast:</strong> {movie.cast.join(", ")}
-          </p>
-          <p style={{ marginBottom: "0.5rem" }}>
-            <strong>Release Date:</strong> {movie.releaseDate}
-          </p>
-          <p style={{ marginBottom: "1rem" }}>
-            <strong>Rating:</strong> ⭐ {movie.rating}/10
-          </p>
-          <button
-            style={{
-              marginTop: "1rem",
-              padding: "0.75rem 1.5rem",
-              backgroundColor: "#ff416c",
-              color: "#fff",
-              border: "none",
-              borderRadius: "10px",
-              cursor: "pointer",
-              fontWeight: "bold",
-              boxShadow: "0 0 10px #ff416c80",
-              transition: "0.3s",
-            }}
-            onClick={() => alert("Ticket booking coming soon!")}
-          >
-            Book Tickets
-          </button>
-        </div>
+          onMouseOver={(e) => e.target.style.backgroundColor = '#b91c1c'}
+          onMouseOut={(e) => e.target.style.backgroundColor = '#dc2626'}
+        >
+          Book Ticket
+        </button>
       </div>
     </div>
   );
