@@ -41,18 +41,6 @@ This project demonstrates **full-stack development + cloud deployment on Azure**
 
 ---
 
-## Screenshots:
-
-![1755589288683](image/readme/1755589288683.png)
-
-![1755588944824](image/readme/1755588944824.jpg)
-
-![1755588952118](image/readme/1755588952118.jpg)
-
-![1755588962727](image/readme/1755588962727.jpg)![1755588971508](image/readme/1755588971508.jpg)
-
-![1755589343206](image/readme/1755589343206.png)
-
 ## Tech Stack
 
 - **Frontend:** React (Vite), TailwindCSS, Axios
@@ -73,6 +61,19 @@ This project demonstrates **full-stack development + cloud deployment on Azure**
   npm run dev
 
 ### Clone the Repository
+---
+
+## Screenshots:
+
+![1755589288683](image/readme/1755589288683.png)
+
+![1755588944824](image/readme/1755588944824.jpg)
+
+![1755588952118](image/readme/1755588952118.jpg)
+
+![1755588962727](image/readme/1755588962727.jpg)![1755588971508](image/readme/1755588971508.jpg)
+
+![1755589343206](image/readme/1755589343206.png)
 
 ```bash
 git clone https://github.com/Amogh052003/Movie_ticket_booking.git
