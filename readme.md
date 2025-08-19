@@ -60,7 +60,6 @@ This project demonstrates **full-stack development + cloud deployment on Azure**
   npm install
   npm run dev
 
-### Clone the Repository
 ---
 
 ## Screenshots:
@@ -75,6 +74,7 @@ This project demonstrates **full-stack development + cloud deployment on Azure**
 
 ![1755589343206](image/readme/1755589343206.png)
 
+### Clone the Repository
 ```bash
 git clone https://github.com/Amogh052003/Movie_ticket_booking.git
 cd Movie_ticket_booking
